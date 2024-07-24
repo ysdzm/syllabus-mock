@@ -90,7 +90,7 @@ button {
 .selected-subject-info {
   margin-top: 20px;
   text-align: left;
-  width: 200px; /* 必要に応じて幅を調整 */
+  width: 1200px; /* 必要に応じて幅を調整 */
   margin-left: 20px; /* 左側にスペースを確保 */
 }
 

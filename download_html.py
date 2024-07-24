@@ -28,7 +28,7 @@ def download_html_for_range(start_id, end_id):
 
 if __name__ == "__main__":
     # IDの範囲を設定する
-    start_id = 80078
+    start_id = 79952
     end_id = 81254
     
     # HTMLデータを指定された範囲内のIDで保存する

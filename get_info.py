@@ -59,28 +59,34 @@ for html_file in html_files:
                         "時間": time
                     }
 
+            # 時間割番号を抽出
+            timetable_number_td = soup.find('td', string="時間割番号")
+            if timetable_number_td:
+                timetable_number = timetable_number_td.find_next_sibling('td').get_text(strip=True)
+                timetable_data["時間割番号"] = timetable_number
+
+            # 科目区分を抽出
+            subject_type_td = soup.find('td', string="科目区分")
+            if subject_type_td:
+                subject_type = subject_type_td.find_next_sibling('td').get_text(strip=True)
+                timetable_data["科目区分"] = subject_type
+
             # 授業科目名を抽出
             lecture_td = soup.find('td', string="授業科目名")
             if lecture_td:
                 lecture_name_td = lecture_td.find_next_sibling('td')
                 if lecture_name_td:
-
                     # <div> 要素を取得
                     div_element = lecture_name_td.find('div')
-
-                    print(div_element)
 
                     if div_element:
                         div_text = div_element.get_text(separator='\n', strip=True)
                         parts = div_text.split('\n')
-                        print(parts)
                      
                         # 最初の部分を取得（日本語）
                         if parts:
                             first_part = parts[0]
-
                             timetable_data["講義名"] = first_part
-
                         else:
                             print("テキストの最初の部分が見つかりませんでした。")
                     else:

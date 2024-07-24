@@ -23,9 +23,9 @@ function App() {
     return <div>Loading...</div>;
   }
 
-  const handleSubjectToggle = (subject, day, period, quarter) => {
+  const handleSubjectToggle = (subject, day, period, quarter, number) => {
     setSelectedSubjects(prevSubjects => {
-      const key = day === "全遠隔" ? `${quarter}-${day}-${period}-${subject}` : `${quarter}-${day}-${period}`;
+      const key = day === "全遠隔" ? `${quarter}-${day}-${period}-${number}` : `${quarter}-${day}-${period}`;
       const isSelected = prevSubjects[key]?.subject === subject;
       const newSubjects = { ...prevSubjects };
 
@@ -77,24 +77,7 @@ function App() {
             {periods.map(periodRange => (
               <div className="schedule-row" key={periodRange}>
                 <div className="schedule-cell period-cell">{periodRange}限目</div>
-                {periodRange === "15-16" ? (
-                  <div className="schedule-cell" colSpan={daysOfWeek.length} key="all-days">
-                    <div className="subjects-container">
-                      {regularData
-                        .filter(item => item.クォーター === activeQuarter && item.時間 === "15-16")
-                        .map(item => (
-                          <button
-                            key={item.講義名}
-                            className={`subject-button ${selectedSubjects[`${activeQuarter}-全日-${periodRange}`]?.subject === item.講義名 ? 'active' : ''}`}
-                            onClick={() => handleSubjectToggle(item.講義名, "全日", periodRange, activeQuarter)}
-                          >
-                            {item.講義名}
-                          </button>
-                        ))}
-                    </div>
-                  </div>
-                ) : (
-                  daysOfWeek.map(day => (
+                {daysOfWeek.map(day => (
                     <div className="schedule-cell" key={day}>
                       <div className="subjects-container">
                         {regularData
@@ -105,13 +88,12 @@ function App() {
                               className={`subject-button ${selectedSubjects[`${activeQuarter}-${day}-${periodRange}`]?.subject === item.講義名 ? 'active' : ''}`}
                               onClick={() => handleSubjectToggle(item.講義名, day, periodRange, activeQuarter)}
                             >
-                              {item.講義名}
+                              {item.講義名} {item.時間割番号}
                             </button>
                           ))}
                       </div>
                     </div>
-                  ))
-                )}
+                  ))}
              </div>
             ))}
           </div>
@@ -122,10 +104,10 @@ function App() {
                 // TODO：やや無理やりな実装なので改善
                 <button
                   key={item.講義名}
-                  className={`subject-button ${selectedSubjects[`${activeQuarter}-全遠隔-${item.時間}-${item.講義名}`]?.subject === item.講義名 ? 'active' : ''}`}
-                  onClick={() => handleSubjectToggle(item.講義名, "全遠隔", item.時間, activeQuarter)}
+                  className={`subject-button ${selectedSubjects[`${activeQuarter}-全遠隔-${item.時間}-${item.時間割番号}`]?.subject === item.講義名 ? 'active' : ''}`}
+                  onClick={() => handleSubjectToggle(item.講義名, "全遠隔", item.時間, activeQuarter, item.時間割番号)}
                 >
-                  {item.講義名}
+                  {item.講義名} {item.時間割番号}
                 </button>
               ))}
           </div>
