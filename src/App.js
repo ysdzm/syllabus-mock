@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const daysOfWeek = ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"];
-const periods = ["1-2", "3-4", "5-6", "7-8", "9-10", "11-12", "13-14", ];
+const periods = ["1-2", "3-4", "5-6", "7-8", "9-10", "11-12", "13-14"];
 const quarters = ["１", "２", "３", "４"];
 
 function App() {
@@ -52,6 +52,9 @@ function App() {
     }
     return [regular, remote];
   }, [[], []]);
+
+  // 選択されている科目の個数を取得
+  const selectedSubjectCount = Object.keys(selectedSubjects).length;
 
   return (
     <div className="outer-container">
@@ -114,6 +117,7 @@ function App() {
         </div>
       </div>
       <div className="selected-subject-info">
+        <h3>選択されている科目数: {selectedSubjectCount}</h3>
         {quarters.map(quarter => (
           <div key={quarter}>
             <h3>第{quarter}クォーター</h3>

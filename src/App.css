@@ -38,6 +38,7 @@ button {
 .schedule-table {
   display: table;
   border-collapse: collapse;
+  width: 100%; /* これを使って表を親コンテナに合わせる */
 }
 
 .schedule-row {
