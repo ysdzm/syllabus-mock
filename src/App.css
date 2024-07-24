@@ -119,4 +119,25 @@ button {
   margin-right: 20px; /* 右側にスペースを確保 */
 }
 
+.schedule-table {
+  margin-bottom: 20px; /* 表と全遠隔セクションの間にスペースを確保 */
+}
 
+.remote-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* ボタン間のスペース */
+  margin-top: 20px; /* 表と全遠隔セクションの間にスペースを確保 */
+}
+
+.remote-container .subject-button {
+  flex: 1 1 calc(20% - 10px); /* 5列で折り返し */
+  max-width: calc(20% - 10px); /* 5列の幅設定 */
+  box-sizing: border-box;
+}
+
+.subject-button {
+  display: inline-block;
+  margin: 5px;
+  width: 150px;
+}

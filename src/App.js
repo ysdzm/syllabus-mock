@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Nav } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css'; // BootstrapのCSSをインポート
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const daysOfWeek = ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"];
-const periods = ["1-2", "3-4", "5-6", "7-8", "9-10", "11-12", "13-14"];
-const quarters = ["１", "２", "３", "４"]; // クォーターの順序
+const periods = ["1-2", "3-4", "5-6", "7-8", "9-10", "11-12", "13-14", ];
+const quarters = ["１", "２", "３", "４"];
 
 function App() {
   const [data, setData] = useState([]);
@@ -25,14 +25,14 @@ function App() {
 
   const handleSubjectToggle = (subject, day, period, quarter) => {
     setSelectedSubjects(prevSubjects => {
-      const key = `${quarter}-${day}-${period}`;
+      const key = day === "全遠隔" ? `${quarter}-${day}-${period}-${subject}` : `${quarter}-${day}-${period}`;
       const isSelected = prevSubjects[key]?.subject === subject;
       const newSubjects = { ...prevSubjects };
 
       if (isSelected) {
         delete newSubjects[key];
       } else {
-        newSubjects[key] = { subject, quarter }; // クォーター名も保存
+        newSubjects[key] = { subject, quarter };
       }
 
       return newSubjects;
@@ -43,6 +43,15 @@ function App() {
     acc[quarter] = Object.entries(selectedSubjects).filter(([key, { quarter: q }]) => q === quarter).map(([key, { subject }]) => ({ key, subject }));
     return acc;
   }, {});
+
+  const [regularData, remoteData] = data.reduce(([regular, remote], item) => {
+    if (item.曜日 === "全遠隔") {
+      remote.push(item);
+    } else {
+      regular.push(item);
+    }
+    return [regular, remote];
+  }, [[], []]);
 
   return (
     <div className="outer-container">
@@ -68,25 +77,57 @@ function App() {
             {periods.map(periodRange => (
               <div className="schedule-row" key={periodRange}>
                 <div className="schedule-cell period-cell">{periodRange}限目</div>
-                {daysOfWeek.map(day => (
-                  <div className="schedule-cell" key={day}>
+                {periodRange === "15-16" ? (
+                  <div className="schedule-cell" colSpan={daysOfWeek.length} key="all-days">
                     <div className="subjects-container">
-                      {data
-                        .filter(item => item.クォーター === activeQuarter && item.曜日 + "曜日" === day && item.時間 === periodRange)
+                      {regularData
+                        .filter(item => item.クォーター === activeQuarter && item.時間 === "15-16")
                         .map(item => (
                           <button
                             key={item.講義名}
-                            className={`subject-button ${selectedSubjects[`${activeQuarter}-${day}-${periodRange}`]?.subject === item.講義名 ? 'active' : ''}`}
-                            onClick={() => handleSubjectToggle(item.講義名, day, periodRange, activeQuarter)}
+                            className={`subject-button ${selectedSubjects[`${activeQuarter}-全日-${periodRange}`]?.subject === item.講義名 ? 'active' : ''}`}
+                            onClick={() => handleSubjectToggle(item.講義名, "全日", periodRange, activeQuarter)}
                           >
                             {item.講義名}
                           </button>
                         ))}
                     </div>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  daysOfWeek.map(day => (
+                    <div className="schedule-cell" key={day}>
+                      <div className="subjects-container">
+                        {regularData
+                          .filter(item => item.クォーター === activeQuarter && item.曜日 + "曜日" === day && item.時間 === periodRange)
+                          .map(item => (
+                            <button
+                              key={item.講義名}
+                              className={`subject-button ${selectedSubjects[`${activeQuarter}-${day}-${periodRange}`]?.subject === item.講義名 ? 'active' : ''}`}
+                              onClick={() => handleSubjectToggle(item.講義名, day, periodRange, activeQuarter)}
+                            >
+                              {item.講義名}
+                            </button>
+                          ))}
+                      </div>
+                    </div>
+                  ))
+                )}
+             </div>
             ))}
+          </div>
+          <div className="remote-container">
+            {remoteData
+              .filter(item => item.クォーター === activeQuarter && item.曜日 === "全遠隔")
+              .map(item => (
+                // TODO：やや無理やりな実装なので改善
+                <button
+                  key={item.講義名}
+                  className={`subject-button ${selectedSubjects[`${activeQuarter}-全遠隔-${item.時間}-${item.講義名}`]?.subject === item.講義名 ? 'active' : ''}`}
+                  onClick={() => handleSubjectToggle(item.講義名, "全遠隔", item.時間, activeQuarter)}
+                >
+                  {item.講義名}
+                </button>
+              ))}
           </div>
         </div>
       </div>
@@ -96,13 +137,13 @@ function App() {
             <h3>第{quarter}クォーター</h3>
             {groupedSubjects[quarter].length > 0 ? (
               groupedSubjects[quarter].map(({ key, subject }) => {
-                const [day, period] = key.split('-');
+                const [q, day, period] = key.split('-');
                 return (
                   <div key={key}>
                     <p>{subject}</p>
                     <ul>
                       {data
-                        .filter(item => item.講義名 === subject && item.クォーター === quarter && item.曜日 + "曜日" === day && item.時間 === period)
+                        .filter(item => item.講義名 === subject && item.クォーター === quarter && (item.曜日 + "曜日" === day || (day === "全遠隔" && item.曜日 === "全遠隔")) && item.時間 === period)
                         .map(item => (
                           <li key={`${item.曜日}-${item.時間}`}>
                             {item.曜日}曜日 - {item.時間}

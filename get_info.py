@@ -34,18 +34,30 @@ for html_file in html_files:
         if text == "時間割":  # 正確に "時間割" と一致するセルを探す
             timetable_td = info.find_next_sibling('td')
             timetable_text = timetable_td.get_text(strip=True)
-            
-            # 正規表現を使用してクォーター、曜日、時間を抽出
-            match = re.search(r"第(\d)クォーター\s*(\w)曜(\d+-\d+)限", timetable_text)
-            if match:
-                quarter = match.group(1)
-                day = match.group(2)
-                time = match.group(3)
-                timetable_data = {
-                    "クォーター": quarter,
-                    "曜日": day,
-                    "時間": time
-                }
+
+            if "全遠隔" in timetable_text:
+                # 「全遠隔 (15-16限)」形式
+                match = re.search(r"第(\d)クォーター.*\((\d+-\d+)限\)", timetable_text)
+                if match:
+                    quarter = match.group(1)
+                    time = match.group(2)
+                    timetable_data = {
+                        "クォーター": quarter,
+                        "曜日": "全遠隔",
+                        "時間": time
+                    }
+            else:
+                # 「火曜5-6限」形式
+                match = re.search(r"第(\d)クォーター\s*(\w)曜(\d+-\d+)限", timetable_text)
+                if match:
+                    quarter = match.group(1)
+                    day = match.group(2)
+                    time = match.group(3)
+                    timetable_data = {
+                        "クォーター": quarter,
+                        "曜日": day,
+                        "時間": time
+                    }
 
             # 授業科目名を抽出
             lecture_td = soup.find('td', string="授業科目名")
