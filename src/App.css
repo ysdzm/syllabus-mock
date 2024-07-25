@@ -1,3 +1,29 @@
+body {
+  background-color: #ffffcc;
+}
+
+.nav-link {
+  background-color: #000099;
+  color: white;
+}
+
+.schedule-table{
+  background-color: #CCFFFF;
+}
+
+.quarter{
+  background-color: #CCFFFF;
+}
+
+header {
+  background-color: #ffffcc;
+  color: #000099;
+  text-align: center; /* テキストを中央寄せ */
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold; 
+}
+
 .outer-container {
   width: 1200px;
   margin: auto;

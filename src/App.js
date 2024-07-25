@@ -113,6 +113,7 @@ function App() {
           </label>
         </div>
       <div className="main-content">
+        <header>名古屋工業大学 大学院 履修チェッカー</header>
         <div className="tab-container">
           <Nav variant="tabs" defaultActiveKey="1" onSelect={(selectedKey) => setActiveQuarter(selectedKey)}>
             {quarters.map((quarter) => (
