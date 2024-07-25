@@ -1,8 +1,10 @@
 .outer-container {
   width: 1200px;
   margin: auto;
-  text-align: center;
+  /* text-align: center; */
   display: flex;
+  flex-direction: row;
+  gap: 20px; /* コンテンツ間のスペースを確保 */
 }
 
 .button-container {
@@ -16,18 +18,32 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  border: none;
+  border-radius: 5px; /* ボタンの角を丸くする */
+  background-color: #007bff; /* ボタンの背景色 */
+  color: white;
+  transition: background-color 0.3s, transform 0.2s; /* ホバー時のアニメーション */
+}
+
+button:hover {
+  background-color: #0056b3; /* ホバー時の背景色 */
+  transform: scale(1.05); /* ホバー時の拡大効果 */
 }
 
 .quarter {
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 20px;
   margin-top: 20px;
   text-align: center;
+  background-color: #f8f9fa; /* 背景色の変更 */
+  border-radius: 8px; /* 角を丸くする */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* シャドウの追加 */
 }
 
 .quarter-header {
-  font-size: 1.5em;
-  margin-bottom: 10px;
+  font-size: 1.8em; /* ヘッダーのフォントサイズを調整 */
+  margin-bottom: 15px; /* マージンを調整 */
+  color: #343a40; /* ヘッダーの文字色 */
 }
 
 .schedule-container {
@@ -38,7 +54,8 @@ button {
 .schedule-table {
   display: table;
   border-collapse: collapse;
-  width: 100%; /* これを使って表を親コンテナに合わせる */
+  width: 100%;
+  margin: 0 auto;
 }
 
 .schedule-row {
@@ -48,13 +65,13 @@ button {
 .schedule-cell {
   display: table-cell;
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 12px; /* パディングを増やす */
   vertical-align: top;
 }
 
 .period-cell {
   font-weight: bold;
-  background-color: #f0f0f0;
+  background-color: #e9ecef; /* 背景色の変更 */
 }
 
 .subjects-container {
@@ -64,39 +81,63 @@ button {
 }
 
 .subject-button {
-  background-color: #f0f0f0;
+  background-color: #f8f9fa;
   border: 2px solid #ddd;
-  border-radius: 10px;
-  padding: 1px 10px;
+  border-radius: 8px; /* 角を丸くする */
+  padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px; /* フォントサイズを調整 */
   text-align: center;
   transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* シャドウの追加 */
   width: 100%;
+  max-width: 200px; /* ボタンの最大幅を設定 */
 }
 
 .subject-button.active {
-  background-color: skyblue;
+  background-color: #17a2b8; /* アクティブ時の背景色 */
   color: #fff;
-  border-color: skyblue;
+  border-color: #17a2b8;
 }
 
 .subject-button:hover {
-  /* background-color: orange; */
+  background-color: #17a2b8; /* ホバー時の背景色 */
   transform: scale(1.05);
 }
 
 .selected-subject-info {
-  margin-top: 20px;
-  text-align: left;
-  width: 1200px; /* 必要に応じて幅を調整 */
-  margin-left: 20px; /* 左側にスペースを確保 */
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  width: 300px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  background-color: #ffffff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px; /* 角を丸くする */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* シャドウの追加 */
+}
+
+.checkbox-container {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  width: 300px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  background-color: #ffffff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px; /* 角を丸くする */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* シャドウの追加 */
 }
 
 .selected-subject-info h3 {
-  font-size: 1.2em;
+  font-size: 1.4em; /* ヘッダーのフォントサイズを調整 */
+  margin-bottom: 15px; /* マージンを調整 */
+  color: #343a40; /* ヘッダーの文字色 */
 }
 
 .selected-subject-info ul {
@@ -106,39 +147,100 @@ button {
 
 .selected-subject-info li {
   margin-bottom: 5px;
-}
-
-.schedule-table {
-  display: inline-table; /* テーブルを中央に配置 */
-  border-collapse: collapse;
-  margin: 0 auto; /* テーブルを中央に配置 */
-}
-
-
-.quarter {
-  flex: 1;
-  margin-right: 20px; /* 右側にスペースを確保 */
-}
-
-.schedule-table {
-  margin-bottom: 20px; /* 表と全遠隔セクションの間にスペースを確保 */
+  font-size: 16px; /* フォントサイズを調整 */
 }
 
 .remote-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* ボタン間のスペース */
-  margin-top: 20px; /* 表と全遠隔セクションの間にスペースを確保 */
+  gap: 15px; /* ボタン間のスペース */
+  margin-top: 20px;
 }
 
 .remote-container .subject-button {
-  flex: 1 1 calc(20% - 10px); /* 5列で折り返し */
-  max-width: calc(20% - 10px); /* 5列の幅設定 */
+  flex: 1 1 calc(20% - 15px); /* 5列で折り返し */
+  max-width: calc(20% - 15px); /* 5列の幅設定 */
   box-sizing: border-box;
 }
 
+.subject-button.highlight1000 {
+  background-color: #e2f0e2; /* 1000番台のハイライト色 */
+}
+
+.subject-button.highlight2000 {
+  background-color: #e0f7fa; /* 2000番台のハイライト色 */
+}
+
+.subject-button.highlight3000 {
+  background-color: #ffebee; /* 3000番台のハイライト色 */
+}
+
+.subject-button.highlight4000 {
+  background-color: #fff9c4; /* 4000番台のハイライト色 */
+}
+
+.subject-button.highlight5000 {
+  background-color: #fce4ec; /* 5000番台のハイライト色 */
+}
+
+.subject-button.highlight6000 {
+  background-color: #e0f7fa; /* 6000番台のハイライト色 */
+}
+
+.subject-button.highlight7000 {
+  background-color: #fffde7; /* 7000番台のハイライト色 */
+}
+
+.subject-button.highlight8000 {
+  background-color: #e3f2fd; /* 8000番台のハイライト色 */
+}
+
+/* 全体の文字色を黒に設定 */
+body, p, h1, h2, h3, li {
+  color: #000; /* 文字色を黒に設定 */
+}
+
+/* ボタンのテキスト色も黒に設定 */
+button {
+  color: #000;
+}
+
+/* ボタンがアクティブなときのテキスト色も黒に設定 */
+button.active {
+  color: #000;
+}
+
+/* 選択された科目情報のテキスト色を黒に設定 */
+.selected-subject-info h3 {
+  color: #000;
+}
+
+.selected-subject-info p {
+  color: #000;
+}
+
+.selected-subject-info li {
+  color: #000;
+}
+
+/* チェックボックスコンテナのテキスト色を黒に設定 */
+.checkbox-container h3 {
+  color: #000;
+}
+
+.checkbox-container p {
+  color: #000;
+}
+
+.checkbox-container li {
+  color: #000;
+}
+
+/* その他のボタンテキストの色を設定 */
 .subject-button {
-  display: inline-block;
-  margin: 5px;
-  width: 150px;
+  color: #000; /* 文字色を黒に設定 */
+}
+
+.subject-button.active {
+  color: #fff; /* アクティブなボタンの文字色は白に設定 */
 }

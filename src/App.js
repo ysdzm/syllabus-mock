@@ -11,6 +11,14 @@ function App() {
   const [data, setData] = useState([]);
   const [activeQuarter, setActiveQuarter] = useState("１");
   const [selectedSubjects, setSelectedSubjects] = useState({});
+  const [highlight1000, setHighlight1000] = useState(false);
+  const [highlight2000, setHighlight2000] = useState(false);
+  const [highlight3000, setHighlight3000] = useState(false);
+  const [highlight4000, setHighlight4000] = useState(false);
+  const [highlight5000, setHighlight5000] = useState(false);
+  const [highlight6000, setHighlight6000] = useState(false);
+  const [highlight7000, setHighlight7000] = useState(false);
+  const [highlight8000, setHighlight8000] = useState(false);
 
   useEffect(() => {
     fetch('/all_timetable_data.json')
@@ -56,8 +64,54 @@ function App() {
   // 選択されている科目の個数を取得
   const selectedSubjectCount = Object.keys(selectedSubjects).length;
 
+  const getHighlightClass = (number) => {
+    if (highlight1000 && number >= 1000 && number < 2000) return 'highlight1000';
+    if (highlight2000 && number >= 2000 && number < 3000) return 'highlight2000';
+    if (highlight3000 && number >= 3000 && number < 4000) return 'highlight3000';
+    if (highlight4000 && number >= 4000 && number < 5000) return 'highlight4000';
+    if (highlight5000 && number >= 5000 && number < 6000) return 'highlight5000';
+    if (highlight6000 && number >= 6000 && number < 7000) return 'highlight6000';
+    if (highlight7000 && number >= 7000 && number < 8000) return 'highlight7000';
+    if (highlight8000 && number >= 8000 && number < 9000) return 'highlight8000';
+    return '';
+  };
+
   return (
     <div className="outer-container">
+      <div className="checkbox-container">
+          <label>
+            <input type="checkbox" checked={highlight1000} onChange={() => setHighlight1000(!highlight1000)} />
+            1000番台
+          </label>
+          <label>
+            <input type="checkbox" checked={highlight2000} onChange={() => setHighlight2000(!highlight2000)} />
+            2000番台
+          </label>
+          <label>
+            <input type="checkbox" checked={highlight3000} onChange={() => setHighlight3000(!highlight3000)} />
+            3000番台
+          </label>
+          <label>
+            <input type="checkbox" checked={highlight4000} onChange={() => setHighlight4000(!highlight4000)} />
+            4000番台
+          </label>
+          <label>
+            <input type="checkbox" checked={highlight5000} onChange={() => setHighlight5000(!highlight5000)} />
+            5000番台
+          </label>
+          <label>
+            <input type="checkbox" checked={highlight6000} onChange={() => setHighlight6000(!highlight6000)} />
+            6000番台
+          </label>
+          <label>
+            <input type="checkbox" checked={highlight7000} onChange={() => setHighlight7000(!highlight7000)} />
+            7000番台
+          </label>
+          <label>
+            <input type="checkbox" checked={highlight8000} onChange={() => setHighlight8000(!highlight8000)} />
+            8000番台
+          </label>
+        </div>
       <div className="main-content">
         <div className="tab-container">
           <Nav variant="tabs" defaultActiveKey="1" onSelect={(selectedKey) => setActiveQuarter(selectedKey)}>
@@ -81,36 +135,35 @@ function App() {
               <div className="schedule-row" key={periodRange}>
                 <div className="schedule-cell period-cell">{periodRange}限目</div>
                 {daysOfWeek.map(day => (
-                    <div className="schedule-cell" key={day}>
-                      <div className="subjects-container">
-                        {regularData
-                          .filter(item => item.クォーター === activeQuarter && item.曜日 + "曜日" === day && item.時間 === periodRange)
-                          .map(item => (
-                            <button
-                              key={item.講義名}
-                              className={`subject-button ${selectedSubjects[`${activeQuarter}-${day}-${periodRange}`]?.subject === item.講義名 ? 'active' : ''}`}
-                              onClick={() => handleSubjectToggle(item.講義名, day, periodRange, activeQuarter)}
-                            >
-                              {item.講義名} {item.時間割番号}
-                            </button>
-                          ))}
-                      </div>
+                  <div className="schedule-cell" key={day}>
+                    <div className="subjects-container">
+                      {regularData
+                        .filter(item => item.クォーター === activeQuarter && item.曜日 + "曜日" === day && item.時間 === periodRange)
+                        .map(item => (
+                          <button
+                            key={item.講義名}
+                            className={`subject-button ${selectedSubjects[`${activeQuarter}-${day}-${periodRange}`]?.subject === item.講義名 ? 'active' : ''} ${getHighlightClass(item.時間割番号)}`}
+                            onClick={() => handleSubjectToggle(item.講義名, day, periodRange, activeQuarter)}
+                          >
+                            {item.講義名} <br/> {item.時間割番号}
+                          </button>
+                        ))}
                     </div>
-                  ))}
-             </div>
+                  </div>
+                ))}
+              </div>
             ))}
           </div>
           <div className="remote-container">
             {remoteData
               .filter(item => item.クォーター === activeQuarter && item.曜日 === "全遠隔")
               .map(item => (
-                // TODO：やや無理やりな実装なので改善
                 <button
                   key={item.講義名}
-                  className={`subject-button ${selectedSubjects[`${activeQuarter}-全遠隔-${item.時間}-${item.時間割番号}`]?.subject === item.講義名 ? 'active' : ''}`}
+                  className={`subject-button ${selectedSubjects[`${activeQuarter}-全遠隔-${item.時間}-${item.時間割番号}`]?.subject === item.講義名 ? 'active' : ''} ${getHighlightClass(item.時間割番号)}`}
                   onClick={() => handleSubjectToggle(item.講義名, "全遠隔", item.時間, activeQuarter, item.時間割番号)}
                 >
-                  {item.講義名} {item.時間割番号}
+                  {item.講義名} <br/> {item.時間割番号}
                 </button>
               ))}
           </div>
@@ -126,8 +179,8 @@ function App() {
                 const [q, day, period] = key.split('-');
                 return (
                   <div key={key}>
-                    <p>{subject}</p>
-                    <ul>
+                    <p class="subject-button">{subject}</p>
+                    {/* <ul>
                       {data
                         .filter(item => item.講義名 === subject && item.クォーター === quarter && (item.曜日 + "曜日" === day || (day === "全遠隔" && item.曜日 === "全遠隔")) && item.時間 === period)
                         .map(item => (
@@ -135,7 +188,7 @@ function App() {
                             {item.曜日}曜日 - {item.時間}
                           </li>
                         ))}
-                    </ul>
+                    </ul> */}
                   </div>
                 );
               })
